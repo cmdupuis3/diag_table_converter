@@ -1,0 +1,43 @@
+
+$name
+$baseDate
+#
+"grid_spec",            -1, "months",  1, "days", "time",
+"dynamics", "grid_lont", "grid_lont", "grid_spec", "all", .false.,  [1,2,3,5], 2
+"dynamics", "grid_latt", "grid_latt", "grid_spec", "all", .false.,  "none", 2
+"dynamics", "area",      "area",      "grid_spec", "all", .false.,  "none", 2
+"flux",     "sftlf",     "sftlf",     "grid_spec", "all", .false.,  "none", 2
+"flux",     "land_mask", "land_mask", "grid_spec", "all", .false.,  "none", 2
+#
+"atmos_month",      1, "months", 1, "days", "time"
+#input forcing output variables
+ "atmos_pr", "sw",                     "sw",                      "atmos_month", "all", .true., "none", 2
+ "atmos_pr", "lw",                     "lw",                      "atmos_month", "all", .true., "none", 2
+ "atmos_pr", "swdn_sfc",               "swdn_sfc",                "atmos_month", "all", .true., "none", 2
+ "atmos_pr", "lwdn_sfc",               "lwdn_sfc",                "atmos_month", "all", .true., "none", 2
+ "atmos_pr", "ps",                     "ps",                      "atmos_month", "all", .true., "none", 2
+ "atmos_pr", "lprec",                  "lprec",                   "atmos_month", "all", .true., "none", 2
+ "atmos_pr", "fprec",                  "fprec",                   "atmos_month", "all", .true., "none", 2
+#surface values
+ "flux",   "ice_mask",                 "ice_mask",                "atmos_month", "all", .true., "none", 2
+ "flux",   "z_atm",                    "z_atm",                   "atmos_month", "all", .true., "none", 2
+ "flux",   "drag_moist",               "drag_moist",              "atmos_month", "all", .true., "none", 2
+ "flux",   "drag_heat",                "drag_heat",               "atmos_month", "all", .true., "none", 2
+ "flux",   "drag_mom",                 "drag_mom",                "atmos_month", "all", .true., "none", 2
+ "flux",   "rough_moist",              "rough_moist",             "atmos_month", "all", .true., "none", 2
+ "flux",   "rough_heat",               "rough_heat",              "atmos_month", "all", .true., "none", 2
+ "flux",   "rough_mom",                "rough_mom",               "atmos_month", "all", .true., "none", 2
+ "flux",   "rough_scale",              "rough_scale",             "atmos_month", "all", .true., "none", 2
+ "flux",   "gust",                     "gust",                    "atmos_month", "all", .true., "none", 2
+ "flux",   "wind",                     "wind",                    "atmos_month", "all", .true., "none", 2
+ "flux",   "t_ref",                    "t_ref",                   "atmos_month", "all", .true., "none", 2
+ "flux",   "q_ref",                    "q_ref",                   "atmos_month", "all", .true., "none", 2
+ "flux",   "t_surf",                   "t_surf",                  "atmos_month", "all", .true., "none", 2
+ "flux",   "t_ca",                     "t_ca",                    "atmos_month", "all", .true., "none", 2
+ "flux",   "q_surf",                   "q_surf",                  "atmos_month", "all", .true., "none", 2
+ "flux",   "shflx",                    "shflx",                   "atmos_month", "all", .true., "none", 2
+ "flux",   "evap",                     "evap",                    "atmos_month", "all", .true., "none", 2
+ "flux",   "lwflx",                    "lwflx",                   "atmos_month", "all", .true., "none", 2
+ "flux",   "co2_atm_dvmr",             "co2_atm_dvmr",            "atmos_month", "all", .true., "none", 2
+ "flux",   "co2_surf_dvmr",            "co2_surf_dvmr",           "atmos_month", "all", .true., "none", 2
+
