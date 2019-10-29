@@ -111,7 +111,7 @@ let (|DiagLine|_|) = function
         Some ({ Name = name; Variable = variable; Files = [file]; Reduction = reduction; Region = region; Kind = kind; Module = modjuwel; Commented = true}, tail)
     | _ -> None
 
-/// Converts diagnostic entries into objects, including commented-out entries
+/// Converts file entries into objects, including commented-out entries
 let (|FileLine|_|) = function
     | Token.Str name :: Token.Int freq :: Token.Str freqUnit :: Token.Int something :: Token.Str timeUnit :: Token.Str unlimitedDimension :: tail ->
         Some ({ Name = name; Frequency = freq; FrequencyUnit = freqUnit; TimeUnit = timeUnit; UnlimitedDimension = unlimitedDimension; Commented = false}, tail)
@@ -145,7 +145,7 @@ let lex (tokens: Token list) =
             |> fun x -> if not x.IsEmpty then (head :: x) |> List.reduce (+) else head
             |> fun x -> x :: List.filter ((inDifferentFile head) >> not) tail
 
-    reduceDiags diags
+    files, reduceDiags diags
 
 
 
