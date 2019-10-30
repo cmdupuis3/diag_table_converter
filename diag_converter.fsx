@@ -25,7 +25,9 @@ type Diagnostic =
 
     }
     static member (+) (left: Diagnostic, right: Diagnostic) =
-        if (left.Name, left.Variable, left.Reduction, left.Region, left.Kind, left.Module) = (right.Name, right.Variable, right.Reduction, right.Region, right.Kind, right.Module) then
+        if (left.Name, left.Variable, left.Reduction, left.Region, left.Kind, left.Module) =
+           (right.Name, right.Variable, right.Reduction, right.Region, right.Kind, right.Module) &&
+           not left.Commented && not right.Commented then
             {
                 Name = left.Name;
                 Variable = left.Variable;
@@ -177,13 +179,14 @@ let toYaml (files: File list) (diags: Diagnostic list) =
     String.concat "\n" ["diag_files:"; filesText; "diag_fields:"; diagsText]
 
 
+[<EntryPoint>]
+let main args =
+    let iFileName, oFileName = args.[0], args.[1]
 
-let table = File.ReadAllText "diags_in.txt"
+    File.ReadAllText iFileName
+    |> tokenize
+    |> lex
+    ||> toYaml
+    |> fun x -> File.WriteAllText (oFileName, x)
 
-let tokens = table |> tokenize
-let files, diags = tokens |> lex;;
-
-let yaml = table |> tokenize |> lex ||> toYaml
-
-File.WriteAllText ("diags_out.yaml", yaml)
-
+    0
