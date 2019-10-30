@@ -2,6 +2,16 @@
 open System.IO
 open System.Text.RegularExpressions
 
+
+/// Inserts a tab character at the beginning of each string in the input list.
+let tab x =
+    x |> List.map (fun y -> String.concat "" ["\t"; y])
+
+/// Inserts a tab character at the end of each string in the input list.
+let newln x =
+    x |> List.map (fun y -> String.concat "" [y; "\n"])
+
+
 type File =
     {
         Name: string
@@ -111,7 +121,7 @@ let (|DiagLine|_|) = function
         Some ({ Name = name; Variable = variable; Files = [file]; Reduction = reduction; Region = region; Kind = kind; Module = modjuwel; Commented = true}, tail)
     | _ -> None
 
-/// Converts file entries into objects, including commented-out entries
+/// Converts diagnostic entries into objects, including commented-out entries
 let (|FileLine|_|) = function
     | Token.Str name :: Token.Int freq :: Token.Str freqUnit :: Token.Int something :: Token.Str timeUnit :: Token.Str unlimitedDimension :: tail ->
         Some ({ Name = name; Frequency = freq; FrequencyUnit = freqUnit; TimeUnit = timeUnit; UnlimitedDimension = unlimitedDimension; Commented = false}, tail)
@@ -147,9 +157,43 @@ let lex (tokens: Token list) =
 
     files, reduceDiags diags
 
+let comment =
+    List.map (fun x -> String.concat "" ["#"; x])
+
+let toYaml (files: File list) (diags: Diagnostic list) =
+    let filesText =
+        files |> List.map (fun (x: File) -> String.concat "" ([
+            ["-   name: ";          x.Name;                "\n"] |> String.concat "";
+            ["    frequency: ";     x.Frequency |> string; "\n"] |> String.concat "";
+            ["    frequencyUnit: "; x.FrequencyUnit;       "\n"] |> String.concat "";
+            ["    timeUnit: ";      x.TimeUnit;            "\n"] |> String.concat "";
+            ["    unlimitedDim: ";  x.UnlimitedDimension;  "\n"] |> String.concat ""
+        ] |> fun y -> if x.Commented then comment y else y))
+        |> String.concat ""
+
+    let diagsText =
+        diags |> List.map (fun (x: Diagnostic) -> String.concat "" ([
+            ["-   name: ";      x.Name;                         "\n"] |> String.concat "";
+            ["    variable: ";  x.Variable |> string;           "\n"] |> String.concat "";
+            ["    files: [";    x.Files |> String.concat ", "; "]\n"] |> String.concat "";
+            ["    all: ";       "all";                          "\n"] |> String.concat "";
+            ["    reduction: "; x.Reduction;                    "\n"] |> String.concat "";
+            ["    region: ";    x.Region;                       "\n"] |> String.concat "";
+            ["    kind: ";      x.Kind |> string;               "\n"] |> String.concat "";
+            ["    module: ";    x.Module;                       "\n"] |> String.concat ""
+        ] |> fun y -> if x.Commented then comment y else y))
+        |> String.concat ""
+
+    String.concat "\n" ["diag_files:"; filesText; "diag_fields:"; diagsText]
+
 
 
 let table = File.ReadAllText "diags_in.txt"
 
 let tokens = table |> tokenize
-let b = tokens |> lex;;
+let files, diags = tokens |> lex;;
+
+let yaml = table |> tokenize |> lex ||> toYaml
+
+File.WriteAllText ("diags_out.yaml", yaml)
+
