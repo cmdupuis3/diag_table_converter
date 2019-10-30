@@ -2,16 +2,6 @@
 open System.IO
 open System.Text.RegularExpressions
 
-
-/// Inserts a tab character at the beginning of each string in the input list.
-let tab x =
-    x |> List.map (fun y -> String.concat "" ["\t"; y])
-
-/// Inserts a tab character at the end of each string in the input list.
-let newln x =
-    x |> List.map (fun y -> String.concat "" [y; "\n"])
-
-
 type File =
     {
         Name: string
