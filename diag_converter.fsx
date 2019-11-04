@@ -165,14 +165,14 @@ let toYaml (files: File list) (diags: Diagnostic list) =
 
     let diagsText =
         diags |> List.map (fun (x: Diagnostic) -> String.concat "" ([
-            ["-   name: ";      x.Name;                         "\n"] |> String.concat "";
-            ["    variable: ";  x.Variable |> string;           "\n"] |> String.concat "";
-            ["    files: [";    x.Files |> String.concat ", "; "]\n"] |> String.concat "";
-            ["    all: ";       "all";                          "\n"] |> String.concat "";
-            ["    reduction: "; x.Reduction;                    "\n"] |> String.concat "";
-            ["    region: ";    x.Region;                       "\n"] |> String.concat "";
-            ["    kind: ";      x.Kind |> string;               "\n"] |> String.concat "";
-            ["    module: ";    x.Module;                       "\n"] |> String.concat ""
+            ["-   name: ";      x.Name;                                    "\n"] |> String.concat "";
+            ["    variable: ";  x.Variable |> string;                      "\n"] |> String.concat "";
+            ["    files: [";    x.Files |> String.concat ", ";            "]\n"] |> String.concat "";
+            ["    all: ";       "all";                                     "\n"] |> String.concat "";
+            ["    reduction: "; x.Reduction;                               "\n"] |> String.concat "";
+            ["    region: [";   x.Region.Split ' ' |> String.concat ", "; "]\n"] |> String.concat "";
+            ["    kind: ";      x.Kind |> string;                          "\n"] |> String.concat "";
+            ["    module: ";    x.Module;                                  "\n"] |> String.concat ""
         ] |> fun y -> if x.Commented then comment y else y))
         |> String.concat ""
 
